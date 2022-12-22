@@ -62,22 +62,22 @@ const io = new Server(httpServer, {
     }
 })
 
-const Binding = autoDetect()
-const port = new SerialPort({ 
-    path: 'COM11', 
-    baudRate: 9600,
-    autoOpen: false
-})
+// const Binding = autoDetect()
+// const port = new SerialPort({ 
+//     path: 'COM11', 
+//     baudRate: 9600,
+//     autoOpen: false
+// })
 
-port.open(function (err) {
-    if (err) {
-        return console.log('Error opening port: ', err.message)
-    }
-})
+// port.open(function (err) {
+//     if (err) {
+//         return console.log('Error opening port: ', err.message)
+//     }
+// })
 
-port.on('open', function() {
-    console.log("Port Opened")
-})
+// port.on('open', function() {
+//     console.log("Port Opened")
+// })
 
 function storeData(value){
     if(data.length > 10){
@@ -90,36 +90,36 @@ function storeData(value){
     io.emit(topic, logs.getLatest())
 }
 
-const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
-parser.on('data', function(value) {
-    let result = value.split(",")
-    let converted = {
-        'id': result[0], 
-        'lat': result[1], 
-        'lng': result[2], 
-        'alt': result[3], 
-        'sog': result[4], 
-        'cog': result[5], 
-        'accx': result[6], 
-        'accy': result[7], 
-        'accz': result[8], 
-        'gyrox': result[9], 
-        'gyroy': result[10], 
-        'gyroz': result[11], 
-        'magx': result[12], 
-        'magy': result[13], 
-        'magz': result[14], 
-        'roll' : result[15],
-        'pitch' : result[16],
-        'yaw' : result[17],
-        'suhu': 0, 
-        'rh': 0, 
-        'cahaya': 0, 
-        'vbat': result[18]/1000, 
-        'tail': result[19]
-    }
-    storeData(converted)
-})
+// const parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }))
+// parser.on('data', function(value) {
+//     let result = value.split(",")
+//     let converted = {
+//         'id': result[0], 
+//         'lat': result[1], 
+//         'lng': result[2], 
+//         'alt': result[3], 
+//         'sog': result[4], 
+//         'cog': result[5], 
+//         'accx': result[6], 
+//         'accy': result[7], 
+//         'accz': result[8], 
+//         'gyrox': result[9], 
+//         'gyroy': result[10], 
+//         'gyroz': result[11], 
+//         'magx': result[12], 
+//         'magy': result[13], 
+//         'magz': result[14], 
+//         'roll' : result[15],
+//         'pitch' : result[16],
+//         'yaw' : result[17],
+//         'suhu': 0, 
+//         'rh': 0, 
+//         'cahaya': 0, 
+//         'vbat': result[18]/1000, 
+//         'tail': result[19]
+//     }
+//     storeData(converted)
+// })
 
 // If a connection granted
 io.on("connection", (socket) => {

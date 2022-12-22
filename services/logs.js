@@ -12,13 +12,18 @@ function getMultiple(page = 1) {
   }
 }
 
+function getAll(){
+  const data = db.query("SELECT * FROM monitoring ORDER BY uuid DESC", [])
+  return data
+}
+
 function getLatest(){
   const data = db.query("SELECT * FROM monitoring ORDER BY uuid DESC LIMIT 10", [])
   return data
 }
 
 function getCoords(){
-  const data = db.query("SELECT CAST(lat as numeric(10,8)) as lat, CAST(lng as numeric(10,8)) as lng FROM monitoring ORDER BY uuid DESC LIMIT 500", [])
+  const data = db.query("SELECT CAST(lat as numeric(10,8)) as lat, CAST(lng as numeric(10,8)) as lng FROM monitoring ORDER BY uuid DESC LIMIT 2000", [])
 
   return data
 }
@@ -73,6 +78,7 @@ module.exports = {
   getMultiple,
   getLatest,
   getCoords,
+  getAll,
   create,
   empty
 }

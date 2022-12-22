@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const logs = require('../services/logs');
+const exportUser = require('../services/export');
 
 /* GET logs listing. */
 router.get('/', function(req, res, next) {
@@ -39,5 +40,7 @@ router.post('/', function(req, res, next) {
       next(err);
     }
 });
+
+router.get('/downloadExcel', exportUser);
 
 module.exports = router;
