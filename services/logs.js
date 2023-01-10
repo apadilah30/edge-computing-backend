@@ -19,11 +19,12 @@ function getAll(){
 }
 
 function getLatest(req){
-  let data;
+  let data = db.query("SELECT * FROM monitoring ORDER BY id DESC LIMIT 20", []);
+
   if(req && Object.keys(req).length > 0){
-    data = db.query("SELECT * FROM monitoring WHERE uuid='"+req.id+"' ORDER BY id DESC LIMIT 20", []);
-  } else {
-    data = db.query("SELECT * FROM monitoring ORDER BY id DESC LIMIT 20", []);
+    if(req.id && req.id != 'all'){
+      data = db.query("SELECT * FROM monitoring WHERE uuid='"+req.id+"' ORDER BY id DESC LIMIT 20", []);
+    }
   }
 
   return data
@@ -34,7 +35,8 @@ function getCoords(){
   devices.get()?.forEach(element => {
     results.push({
       name  : element.name,
-      data  : db.query("SELECT CAST(lat as numeric(10,8)) as lat, CAST(lng as numeric(10,8)) as lng, CAST(rssi as numeric(10,8)) as rssi, CAST(snr as numeric(10,8)) as snr, CAST(cpu as numeric(10,8)) as cpu, CAST(ram as numeric(10,8)) as ram, CAST(rom as numeric(10,8)) as rom FROM monitoring WHERE uuid='"+element.name+"' ORDER BY uuid DESC LIMIT 200", [])
+      // data  : db.query("SELECT CAST(lat as numeric(10,8)) as lat, CAST(lng as numeric(10,8)) as lng, CAST(rssi as numeric(10,8)) as rssi, CAST(snr as numeric(10,8)) as snr, CAST(cpu as numeric(10,8)) as cpu, CAST(ram as numeric(10,8)) as ram, CAST(rom as numeric(10,8)) as rom FROM monitoring WHERE uuid='"+element.name+"' ORDER BY uuid DESC LIMIT 200", [])
+      data  : db.query("SELECT * FROM monitoring WHERE uuid='"+element.name+"' ORDER BY uuid DESC LIMIT 200", [])
     })
   });
   // let results = [
@@ -78,6 +80,7 @@ function create(object) {
         id, lat, lng, alt, sog, cog, accx, accy, accz, gyrox, gyroy, gyroz, 
         magx, magy, magz, roll, pitch, yaw, suhu, rh, cahaya, vbat, times, rssi, snr, cpu, ram, rom
     });
+    console.log(object)
     console.log(times+": ok");
   } catch (error) {
     console.log(error)
